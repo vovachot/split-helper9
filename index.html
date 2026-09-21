@@ -47,13 +47,6 @@
         }
         .logo-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
 
-        .page-title {
-            font-size: 22px; font-weight: 800; margin-bottom: 16px;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .page-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.45; }
-
-        /* NOTICE */
         .notice {
             background: linear-gradient(135deg, rgba(231,76,60,0.15), rgba(243,156,18,0.15));
             border: 1px solid rgba(231,76,60,0.4);
@@ -126,8 +119,8 @@
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .card { background: var(--card); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; border: 1px solid var(--border); position: relative; overflow: hidden; }
         .card:active { transform: scale(0.97); border-color: var(--accent); }
-        .card-img-wrapper { width: 100%; height: 130px; border-radius: 14px; margin-bottom: 10px; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .card-img-wrapper img { width: 88%; height: 88%; object-fit: contain; }
+        .card-img-wrapper { width: 100%; height: 130px; border-radius: 14px; margin-bottom: 10px; background: #1c1c2a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         .badge-discount { position: absolute; top: 8px; right: 8px; background: var(--danger); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; z-index: 2; }
         .badge-hit { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #f39c12, #e67e22); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; z-index: 2; }
         .in-stock { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--accent); margin-bottom: 4px; }
@@ -142,7 +135,6 @@
         .btn { width: 100%; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #000; border: none; padding: 11px; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer; font-size: 13px; box-shadow: 0 4px 14px var(--accent-glow); }
         .btn:active { transform: scale(0.95); }
 
-        /* REVIEWS */
         .reviews-header { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; }
         .rating-big { font-size: 48px; font-weight: 900; color: var(--gold); line-height: 1; }
         .rating-info { flex: 1; }
@@ -158,20 +150,9 @@
         .review-verified { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; color: var(--accent); background: rgba(46,204,113,0.1); padding: 2px 6px; border-radius: 8px; margin-left: 6px; }
         .reviews-more { width: 100%; background: var(--card-2); border: 1px solid var(--border); color: var(--accent); padding: 12px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; margin-top: 10px; }
 
-        /* CONTACTS */
-        .contact-btn {
-            display: flex; align-items: center; gap: 12px;
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 14px; padding: 14px; margin-bottom: 10px;
-            color: var(--text); cursor: pointer;
-            transition: all 0.2s ease;
-        }
+        .contact-btn { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 10px; color: var(--text); cursor: pointer; }
         .contact-btn:active { transform: scale(0.97); border-color: var(--accent); }
-        .contact-icon {
-            width: 42px; height: 42px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; flex-shrink: 0;
-        }
+        .contact-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
         .ci-blue { background: rgba(52,152,219,0.15); }
         .ci-green { background: rgba(46,204,113,0.15); }
         .ci-purple { background: rgba(155,89,182,0.15); }
@@ -181,43 +162,17 @@
         .contact-desc { font-size: 11px; color: var(--text-muted); }
         .contact-arrow { color: var(--text-muted); font-size: 18px; }
 
-        /* SCHEDULE */
-        .schedule {
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 16px; margin-bottom: 14px;
-        }
+        .schedule { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; }
         .schedule h3 { font-size: 14px; margin-bottom: 12px; }
-        .schedule-row {
-            display: flex; justify-content: space-between;
-            padding: 8px 0; border-bottom: 1px solid var(--border);
-            font-size: 12px;
-        }
+        .schedule-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
         .schedule-row:last-child { border-bottom: none; }
         .schedule-day { color: var(--text-muted); }
         .schedule-time { color: var(--text); font-weight: 600; }
         .schedule-time.online { color: var(--accent); }
 
-        /* ORDERS */
-        .order-card {
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 14px; padding: 14px; margin-bottom: 10px;
-        }
-        .order-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .order-id { font-size: 11px; color: var(--text-muted); }
-        .order-status {
-            font-size: 10px; font-weight: 700; padding: 3px 8px;
-            border-radius: 8px; text-transform: uppercase;
-        }
-        .status-pending { background: rgba(243,156,18,0.15); color: var(--gold); }
-        .status-paid { background: rgba(46,204,113,0.15); color: var(--accent); }
-        .status-shipped { background: rgba(52,152,219,0.15); color: var(--accent-2); }
-        .order-product { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-        .order-details { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
-
         .empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
         .empty .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
 
-        /* MODAL */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); justify-content: center; align-items: flex-end; z-index: 100; }
         .modal.active { display: flex; }
         .modal-content { background: var(--card); padding: 24px; border-radius: 28px 28px 0 0; width: 100%; max-width: 500px; max-height: 92vh; overflow-y: auto; }
@@ -262,7 +217,6 @@
         .close { background: #252533; color: #fff; border: none; padding: 14px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 600; font-size: 14px; }
         .success { color: var(--accent); font-weight: 700; display: none; margin-top: 15px; text-align: center; font-size: 14px; padding: 12px; background: rgba(46, 204, 113, 0.1); border-radius: 12px; border: 1px solid rgba(46, 204, 113, 0.3); }
 
-        /* NAV */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 30, 0.92); backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0 20px 0; z-index: 50; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 4px 14px; }
         .nav-item.active { color: var(--accent); }
@@ -271,7 +225,7 @@
 </head>
 <body>
 
-    <!-- СТРАНИЦА: МАГАЗИН -->
+    <!-- МАГАЗИН -->
     <div class="page active" id="page-shop">
         <div class="header">
             <div class="logo-wrap">
@@ -287,7 +241,7 @@
             <div class="notice-icon">⚠️</div>
             <div class="notice-text">
                 <h4>Технические неполадки</h4>
-                <p>Сейчас у нас временные технические проблемы с автоматической обработкой. Все заказы оформляются <b>вручную через менеджера</b>. Напишите нам — поможем с выбором и оплатой.</p>
+                <p>Все заказы оформляются <b>вручную через менеджера</b>. Напишите нам — поможем с выбором и оплатой.</p>
             </div>
         </div>
 
@@ -349,7 +303,7 @@
         <div class="grid" id="grid"></div>
     </div>
 
-    <!-- СТРАНИЦА: ЗАКАЗЫ -->
+    <!-- ЗАКАЗЫ -->
     <div class="page" id="page-orders">
         <div class="header">
             <div class="logo-wrap">
@@ -365,19 +319,19 @@
             <div class="notice-icon">⚠️</div>
             <div class="notice-text">
                 <h4>Временные тех. неполадки</h4>
-                <p>Автоматический трекинг заказов временно недоступен. Узнать статус вашего заказа можно <b>через менеджера</b>.</p>
+                <p>Узнать статус заказа можно <b>через менеджера</b>.</p>
             </div>
         </div>
 
         <div class="empty">
             <div class="icon">📭</div>
-            <div style="margin-bottom: 14px;">У вас пока нет заказов</div>
+            <div>У вас пока нет заказов</div>
         </div>
 
         <button class="manager-btn" onclick="openSupport()">💬 Узнать статус заказа</button>
     </div>
 
-    <!-- СТРАНИЦА: ОТЗЫВЫ -->
+    <!-- ОТЗЫВЫ -->
     <div class="page" id="page-reviews">
         <div class="header">
             <div class="logo-wrap">
@@ -403,7 +357,7 @@
         <button class="manager-btn" style="margin-top: 14px;" onclick="openSupport()">💬 Оставить свой отзыв</button>
     </div>
 
-    <!-- СТРАНИЦА: ПОДДЕРЖКА -->
+    <!-- ПОДДЕРЖКА -->
     <div class="page" id="page-support">
         <div class="header">
             <div class="logo-wrap">
@@ -419,35 +373,23 @@
             <div class="notice-icon">⚠️</div>
             <div class="notice-text">
                 <h4>Технические неполадки</h4>
-                <p>Автоматическая система временно не работает. Все вопросы решаются <b>вручную через менеджера</b> — напишите нам, ответим быстро.</p>
+                <p>Автоматическая система временно не работает. Все вопросы решаются <b>через менеджера</b>.</p>
             </div>
         </div>
 
         <div class="schedule">
             <h3>🕐 Часы работы</h3>
-            <div class="schedule-row">
-                <span class="schedule-day">Понедельник — Пятница</span>
-                <span class="schedule-time online">09:00 — 21:00 МСК</span>
-            </div>
-            <div class="schedule-row">
-                <span class="schedule-day">Суббота</span>
-                <span class="schedule-time online">10:00 — 20:00 МСК</span>
-            </div>
-            <div class="schedule-row">
-                <span class="schedule-day">Воскресенье</span>
-                <span class="schedule-time online">11:00 — 19:00 МСК</span>
-            </div>
-            <div class="schedule-row">
-                <span class="schedule-day">Срочные вопросы</span>
-                <span class="schedule-time online">круглосуточно</span>
-            </div>
+            <div class="schedule-row"><span class="schedule-day">Понедельник — Пятница</span><span class="schedule-time online">09:00 — 21:00 МСК</span></div>
+            <div class="schedule-row"><span class="schedule-day">Суббота</span><span class="schedule-time online">10:00 — 20:00 МСК</span></div>
+            <div class="schedule-row"><span class="schedule-day">Воскресенье</span><span class="schedule-time online">11:00 — 19:00 МСК</span></div>
+            <div class="schedule-row"><span class="schedule-day">Срочные вопросы</span><span class="schedule-time online">круглосуточно</span></div>
         </div>
 
         <div class="security-banner">
             <div class="security-icon">🟢</div>
             <div class="security-text">
                 <h4>Сейчас онлайн</h4>
-                <p>Обычно отвечаем в течение 5-10 минут. Если не ответили — напишите ещё раз, обязательно увидим.</p>
+                <p>Обычно отвечаем в течение 5-10 минут.</p>
             </div>
         </div>
 
@@ -457,7 +399,7 @@
             <div class="contact-icon ci-blue">💬</div>
             <div class="contact-info">
                 <div class="contact-name">@splithelper_support</div>
-                <div class="contact-desc">Основная поддержка — Telegram</div>
+                <div class="contact-desc">Основная поддержка</div>
             </div>
             <div class="contact-arrow">›</div>
         </div>
@@ -490,7 +432,7 @@
         </div>
     </div>
 
-    <!-- СТРАНИЦА: О НАС -->
+    <!-- О НАС -->
     <div class="page" id="page-about">
         <div class="header">
             <div class="logo-wrap">
@@ -506,7 +448,7 @@
             <div class="notice-icon">⚠️</div>
             <div class="notice-text">
                 <h4>Сейчас тех. неполадки</h4>
-                <p>Мы работаем в ручном режиме. Все заказы оформляются через менеджера <b>@splithelper_support</b>.</p>
+                <p>Заказы оформляются через менеджера <b>@splithelper_support</b>.</p>
             </div>
         </div>
 
@@ -514,7 +456,7 @@
             <div class="security-icon">🛡️</div>
             <div class="security-text">
                 <h4>Безопасный сервис</h4>
-                <p>Мы помогаем находить технику по выгодным ценам с 2024 года. Более 1 248 выполненных заказов и 3 500 довольных клиентов.</p>
+                <p>Помогаем находить технику по выгодным ценам с 2024 года. Более 1 248 заказов и 3 500 клиентов.</p>
             </div>
         </div>
 
@@ -538,36 +480,16 @@
             </div>
         </div>
 
-        <div class="trust-section">
-            <h3>📋 Реквизиты</h3>
-            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.7;">
-                ИП Сплит Хелпер<br>
-                ИНН: 000000000000<br>
-                ОГРНИП: 000000000000000<br>
-                г. Москва
-            </div>
-        </div>
-
         <button class="manager-btn" onclick="openSupport()">💬 Связаться с нами</button>
     </div>
 
     <!-- НАВИГАЦИЯ -->
     <div class="bottom-nav">
-        <button class="nav-item active" data-page="shop" onclick="showPage('shop')">
-            <span class="nav-icon">🛍️</span><span>Магазин</span>
-        </button>
-        <button class="nav-item" data-page="orders" onclick="showPage('orders')">
-            <span class="nav-icon">📦</span><span>Заказы</span>
-        </button>
-        <button class="nav-item" data-page="reviews" onclick="showPage('reviews')">
-            <span class="nav-icon">⭐</span><span>Отзывы</span>
-        </button>
-        <button class="nav-item" data-page="support" onclick="showPage('support')">
-            <span class="nav-icon">💬</span><span>Помощь</span>
-        </button>
-        <button class="nav-item" data-page="about" onclick="showPage('about')">
-            <span class="nav-icon">ℹ️</span><span>О нас</span>
-        </button>
+        <button class="nav-item active" data-page="shop" onclick="showPage('shop')"><span class="nav-icon">🛍️</span><span>Магазин</span></button>
+        <button class="nav-item" data-page="orders" onclick="showPage('orders')"><span class="nav-icon">📦</span><span>Заказы</span></button>
+        <button class="nav-item" data-page="reviews" onclick="showPage('reviews')"><span class="nav-icon">⭐</span><span>Отзывы</span></button>
+        <button class="nav-item" data-page="support" onclick="showPage('support')"><span class="nav-icon">💬</span><span>Помощь</span></button>
+        <button class="nav-item" data-page="about" onclick="showPage('about')"><span class="nav-icon">ℹ️</span><span>О нас</span></button>
     </div>
 
     <!-- МОДАЛЬНОЕ ОКНО -->
@@ -581,7 +503,7 @@
                 <div class="notice-icon">⚠️</div>
                 <div class="notice-text">
                     <h4>Внимание: тех. неполадки</h4>
-                    <p>Заказ оформляется вручную. После отправки формы с вами свяжется менеджер <b>@splithelper_support</b>.</p>
+                    <p>Заказ оформляется вручную. Менеджер <b>@splithelper_support</b> свяжется с вами.</p>
                 </div>
             </div>
 
@@ -654,7 +576,7 @@
 
             <div class="warning-box">
                 <span>⚠️</span>
-                <div>После перевода обязательно пришлите скриншот чека менеджеру <b>@splithelper_support</b>. Без чека заказ не будет обработан.</div>
+                <div>После перевода обязательно пришлите скриншот чека менеджеру <b>@splithelper_support</b>.</div>
             </div>
 
             <button class="manager-btn" onclick="openSupport()">💬 Написать менеджеру @splithelper_support</button>
@@ -671,15 +593,22 @@
         const USDT_WALLET = "TQ5...xRocket...USDT";
         const XROCKET_TAG = "@xRocket";
 
-        // ===== ТОВАРЫ =====
+        // ===== ТОВАРЫ (РЕАЛЬНЫЕ ФОТО С UNSPLASH) =====
         const products = [
-            { id: 1, cat: 'apple', name: 'iPhone 18 Pro 512GB', desc: 'Тёмная вишня, SIM+eSIM', price: 60000, old: 170000, hit: true, rating: 5.0, reviews: 87, img: 'https://placehold.co/300x300/ffffff/000000?text=iPhone+18+Pro' },
-            { id: 2, cat: 'apple', name: 'iPhone 17 Pro Max 1TB', desc: 'Титан, 1TB', price: 41000, old: 143000, rating: 4.9, reviews: 64, img: 'https://placehold.co/300x300/ffffff/000000?text=iPhone+17' },
-            { id: 3, cat: 'android', name: 'Galaxy S26 Ultra', desc: 'S-Pen, 200МП', price: 27000, old: 82900, hit: true, rating: 4.8, reviews: 52, img: 'https://placehold.co/300x300/ffffff/000000?text=Galaxy+S26' },
-            { id: 4, cat: 'android', name: 'Xiaomi 17 Ultra 512GB', desc: 'Leica, Snapdragon', price: 32000, old: 102000, rating: 4.9, reviews: 41, img: 'https://placehold.co/300x300/ffffff/000000?text=Xiaomi+17' },
-            { id: 5, cat: 'laptop', name: 'MacBook Pro 14 M4', desc: '24GB, 1TB SSD', price: 85000, old: 250000, rating: 5.0, reviews: 38, img: 'https://placehold.co/300x300/ffffff/000000?text=MacBook+Pro' },
-            { id: 6, cat: 'laptop', name: 'ASUS ROG Strix 18', desc: 'RTX 5090, i9', price: 120000, old: 350000, rating: 4.7, reviews: 29, img: 'https://placehold.co/300x300/ffffff/000000?text=ASUS+ROG' },
-            { id: 7, cat: 'apple', name: 'AirPods Pro 3', desc: 'USB-C, ANC', price: 12000, old: 25000, hit: true, rating: 4.9, reviews: 96, img: 'https://placehold.co/300x300/ffffff/000000?text=AirPods+Pro' }
+            { id: 1, cat: 'apple', name: 'iPhone 18 Pro 512GB', desc: 'Тёмная вишня, SIM+eSIM', price: 60000, old: 170000, hit: true, rating: 5.0, reviews: 87,
+              img: 'https://images.unsplash.com/photo-1592286927505-1def25115558?w=400&h=400&fit=crop' },
+            { id: 2, cat: 'apple', name: 'iPhone 17 Pro Max 1TB', desc: 'Титан, 1TB', price: 41000, old: 143000, rating: 4.9, reviews: 64,
+              img: 'https://images.unsplash.com/photo-1678652197831-2d180705cd2c?w=400&h=400&fit=crop' },
+            { id: 3, cat: 'android', name: 'Galaxy S26 Ultra', desc: 'S-Pen, 200МП', price: 27000, old: 82900, hit: true, rating: 4.8, reviews: 52,
+              img: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=400&fit=crop' },
+            { id: 4, cat: 'android', name: 'Xiaomi 17 Ultra 512GB', desc: 'Leica, Snapdragon', price: 32000, old: 102000, rating: 4.9, reviews: 41,
+              img: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop' },
+            { id: 5, cat: 'laptop', name: 'MacBook Pro 14 M4', desc: '24GB, 1TB SSD', price: 85000, old: 250000, rating: 5.0, reviews: 38,
+              img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop' },
+            { id: 6, cat: 'laptop', name: 'ASUS ROG Strix 18', desc: 'RTX 5090, i9', price: 120000, old: 350000, rating: 4.7, reviews: 29,
+              img: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=400&fit=crop' },
+            { id: 7, cat: 'apple', name: 'AirPods Pro 3', desc: 'USB-C, ANC', price: 12000, old: 25000, hit: true, rating: 4.9, reviews: 96,
+              img: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=400&h=400&fit=crop' }
         ];
 
         // ===== ОТЗЫВЫ =====
@@ -688,7 +617,7 @@
             "Заказал {product}, пришёл за 3 дня. Всё оригинальное, упаковка запечатана. Рекомендую!",
             "Цена реально ниже магазинов. Оплатил через {pay}, чек прислал — быстро подтвердили. Спасибо!",
             "Отличный сервис! Менеджер помог с выбором, доставили в ПВЗ. Всё в целости.",
-            "Проверил серийник на сайте производителя — всё официальное. Доставка 2 дня. Буду заказывать ещё.",
+            "Проверил серийник на сайте производителя — всё официальное. Доставка 2 дня.",
             "Долго выбирал, где купить. Здесь цена приятно удивила. Оплата {pay}, всё прошло гладко.",
             "Уже третий заказ. Ни разу не было проблем. Поддержка отвечает мгновенно.",
             "Купил {product} в подарок. Упаковка идеальная, всё запечатано. Жена в восторге!",
@@ -826,7 +755,6 @@
             if (window.Telegram?.WebApp) Telegram.WebApp.HapticFeedback.impactOccurred('light');
         }
 
-        // ===== НАВИГАЦИЯ =====
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + page).classList.add('active');
@@ -835,7 +763,6 @@
             if (window.Telegram?.WebApp) Telegram.WebApp.HapticFeedback.impactOccurred('light');
         }
 
-        // ===== СОСТОЯНИЕ =====
         let currentCat = 'all';
         let sortMode = 'discount';
         let selectedPay = 'sbp';
@@ -891,7 +818,7 @@
                     <div class="card-img-wrapper">
                         <div class="badge-discount">-${discount}%</div>
                         ${p.hit ? '<div class="badge-hit">🔥 ХИТ</div>' : ''}
-                        <img src="${p.img}" loading="lazy" onerror="this.src='https://placehold.co/300x300/cccccc/666666?text=Фото'">
+                        <img src="${p.img}" loading="lazy" onerror="this.src='https://placehold.co/300x300/14141e/2ecc71?text=Фото'">
                     </div>
                     <div class="in-stock"><span class="dot"></span>В наличии</div>
                     <h3>${p.name}</h3>
@@ -1007,7 +934,6 @@
             setTimeout(closeModal, 3000);
         }
 
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
         renderCats();
         renderProducts();
         renderReviews();
