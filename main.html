@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SPLIT HELPER</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg: #0a0a0f; --card: #14141e; --card-2: #1c1c2a;
+            --text: #ffffff; --text-muted: #8e8e9a;
+            --accent: #2ecc71; --accent-2: #3498db;
+            --accent-glow: rgba(46, 204, 113, 0.35);
+            --old: #6b6b7a; --danger: #e74c3c; --gold: #f39c12;
+            --border: #252533; --radius: 20px;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+        body {
+            background: var(--bg); color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            padding: 16px; padding-bottom: 110px; min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(46, 204, 113, 0.12), transparent 40%),
+                radial-gradient(circle at 85% 90%, rgba(52, 152, 219, 0.12), transparent 40%);
+            background-attachment: fixed;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .logo-wrap { display: flex; align-items: center; gap: 10px; }
+        .logo-mark {
+            width: 38px; height: 38px; border-radius: 12px;
+            background: linear-gradient(135deg, #2ecc71, #3498db);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 18px; color: #000;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+        .logo-text {
+            font-size: 19px; font-weight: 800;
+            background: linear-gradient(90deg, #2ecc71, #3498db);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .logo-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+        .location {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 11px; color: var(--text-muted);
+            background: var(--card); padding: 7px 12px;
+            border-radius: 20px; border: 1px solid var(--border);
+        }
+        .location-dot {
+            width: 6px; height: 6px; background: var(--accent);
+            border-radius: 50%; box-shadow: 0 0 8px var(--accent);
+            animation: pulse 1.8s infinite;
+        }
+
+        .verified-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(52,152,219,0.15));
+            border: 1px solid rgba(46,204,113,0.35);
+            border-radius: 14px; padding: 10px 14px; margin-bottom: 14px;
+            font-size: 12px; color: var(--accent); font-weight: 600;
+        }
+        .verified-badge small { color: var(--text-muted); font-weight: 400; margin-left: auto; font-size: 10px; }
+
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+        .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 8px; text-align: center; }
+        .stat-num { font-size: 18px; font-weight: 800; color: var(--accent); }
+        .stat-label { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+
+        .security-banner {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.14), rgba(52, 152, 219, 0.14));
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: var(--radius); padding: 14px 16px; margin-bottom: 14px;
+            display: flex; align-items: flex-start; gap: 12px;
+        }
+        .security-icon { font-size: 26px; flex-shrink: 0; }
+        .security-text h4 { font-size: 14px; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+        .security-text p { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
+
+        .trust-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+        .trust-section h3 { font-size: 14px; margin-bottom: 12px; }
+        .trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .trust-item { display: flex; align-items: center; gap: 8px; }
+        .trust-item .t-icon { width: 30px; height: 30px; border-radius: 10px; background: rgba(46,204,113,0.12); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+        .trust-item b { color: var(--text); font-weight: 600; display: block; font-size: 11px; }
+        .trust-item span { font-size: 10px; color: var(--text-muted); }
+
+        .guarantees { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+        .guarantee { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: center; }
+        .guarantee .g-icon { font-size: 22px; margin-bottom: 6px; }
+        .guarantee .g-title { font-size: 11px; font-weight: 700; margin-bottom: 2px; }
+        .guarantee .g-desc { font-size: 10px; color: var(--text-muted); line-height: 1.3; }
+
+        .promo-box { background: linear-gradient(135deg, rgba(243,156,18,0.12), rgba(231,76,60,0.12)); border: 1px solid rgba(243,156,18,0.35); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+        .promo-box h3 { font-size: 13px; color: var(--gold); margin-bottom: 8px; }
+        .promo-input { display: flex; gap: 8px; }
+        .promo-input input { flex: 1; background: #000; border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 10px; font-size: 13px; outline: none; text-transform: uppercase; }
+        .promo-input button { background: var(--gold); color: #000; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
+        .promo-result { font-size: 11px; margin-top: 8px; }
+
+        .search-wrap { position: relative; margin-bottom: 12px; }
+        .search-wrap input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 12px 16px 12px 42px; border-radius: 14px; font-size: 14px; outline: none; }
+        .search-wrap input:focus { border-color: var(--accent); }
+        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; opacity: 0.5; }
+
+        .cats { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .cats::-webkit-scrollbar { display: none; }
+        .cat-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-muted); padding: 9px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: all 0.25s ease; }
+        .cat-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 18px var(--accent-glow); }
+
+        .sort-wrap { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .sort-label { font-size: 12px; color: var(--text-muted); }
+        .sort-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 6px 12px; border-radius: 10px; cursor: pointer; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card { background: var(--card); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; border: 1px solid var(--border); position: relative; overflow: hidden; }
+        .card:active { transform: scale(0.97); border-color: var(--accent); }
+        .card-img-wrapper { width: 100%; height: 130px; border-radius: 14px; margin-bottom: 10px; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .card-img-wrapper img { width: 88%; height: 88%; object-fit: contain; }
+        .badge-discount { position: absolute; top: 8px; right: 8px; background: var(--danger); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; z-index: 2; }
+        .badge-hit { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #f39c12, #e67e22); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; z-index: 2; }
+        .in-stock { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--accent); margin-bottom: 4px; }
+        .in-stock .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 6px var(--accent); animation: pulse 2s infinite; }
+        .card h3 { font-size: 13px; line-height: 1.3; font-weight: 700; margin-bottom: 4px; }
+        .card .desc { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; line-height: 1.3; }
+        .card-rating { display: flex; align-items: center; gap: 4px; font-size: 11px; margin-bottom: 6px; color: var(--gold); }
+        .card-rating span { color: var(--text-muted); font-size: 10px; }
+        .price-block { margin-top: auto; }
+        .old { text-decoration: line-through; color: var(--old); font-size: 12px; margin-bottom: 2px; }
+        .new { color: var(--accent); font-size: 20px; font-weight: 800; }
+        .btn { width: 100%; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #000; border: none; padding: 11px; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer; font-size: 13px; box-shadow: 0 4px 14px var(--accent-glow); }
+        .btn:active { transform: scale(0.95); }
+
+        .reviews-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-top: 20px; margin-bottom: 14px; }
+        .reviews-section h3 { font-size: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .reviews-section h3 small { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+        .review { padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .review:last-child { border-bottom: none; }
+        .review-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .review-name { font-size: 12px; font-weight: 700; }
+        .review-date { font-size: 10px; color: var(--text-muted); }
+        .review-stars { color: var(--gold); font-size: 11px; margin-bottom: 4px; letter-spacing: 1px; }
+        .review-text { font-size: 11px; color: var(--text-muted); line-height: 1.45; }
+        .review-verified { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; color: var(--accent); background: rgba(46,204,113,0.1); padding: 2px 6px; border-radius: 8px; margin-left: 6px; }
+        .reviews-more { width: 100%; background: var(--card-2); border: 1px solid var(--border); color: var(--accent); padding: 12px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; margin-top: 10px; }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); justify-content: center; align-items: flex-end; z-index: 100; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card); padding: 24px; border-radius: 28px 28px 0 0; width: 100%; max-width: 500px; max-height: 92vh; overflow-y: auto; }
+        .modal-handle { width: 40px; height: 4px; background: #333; border-radius: 2px; margin: 0 auto 20px auto; }
+        .modal-content h2 { font-size: 20px; text-align: center; margin-bottom: 6px; }
+        .modal-sub { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.4; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: block; font-weight: 600; }
+        .form-input, .form-select { width: 100%; background: var(--card-2); border: 1.5px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 12px; font-size: 14px; outline: none; }
+        .form-input:focus, .form-select:focus { border-color: var(--accent); }
+        .form-input::placeholder { color: #555; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .delivery-options { display: flex; gap: 8px; margin-bottom: 14px; }
+        .delivery-opt { flex: 1; background: var(--card-2); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 11px; }
+        .delivery-opt.selected { border-color: var(--accent); background: rgba(46,204,113,0.08); }
+        .delivery-opt .d-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+        .delivery-opt .d-name { font-weight: 700; }
+        .delivery-opt .d-price { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+
+        .pay-methods { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+        .pay-method { background: var(--card-2); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .pay-method.selected { border-color: var(--accent); background: rgba(46, 204, 113, 0.08); }
+        .pay-method .pay-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .pay-sbp { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .pay-crypto { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .pay-xrocket { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .pay-info { flex: 1; }
+        .pay-info .pay-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+        .pay-info .pay-desc { font-size: 11px; color: var(--text-muted); }
+        .pay-check { color: var(--accent); font-size: 20px; opacity: 0; }
+        .pay-method.selected .pay-check { opacity: 1; }
+
+        .wallet-box { background: #000; padding: 16px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 14px; }
+        .wallet-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+        .wallet-address { font-family: 'SF Mono', Menlo, monospace; font-size: 13px; word-break: break-all; color: var(--accent-2); line-height: 1.4; }
+        .wallet-sum { font-size: 24px; font-weight: 800; color: var(--accent); margin-top: 10px; }
+
+        .warning-box { background: rgba(231, 76, 60, 0.1); border: 1px solid rgba(231, 76, 60, 0.3); border-radius: 12px; padding: 12px; font-size: 12px; color: #ff8a80; margin-bottom: 16px; display: flex; gap: 8px; align-items: flex-start; line-height: 1.45; }
+        .manager-btn { background: linear-gradient(135deg, #3498db, #2980b9); color: #fff; border: none; padding: 13px; border-radius: 12px; width: 100%; font-weight: 700; font-size: 14px; cursor: pointer; margin-bottom: 10px; }
+        .close { background: #252533; color: #fff; border: none; padding: 14px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .success { color: var(--accent); font-weight: 700; display: none; margin-top: 15px; text-align: center; font-size: 14px; padding: 12px; background: rgba(46, 204, 113, 0.1); border-radius: 12px; border: 1px solid rgba(46, 204, 113, 0.3); }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 30, 0.92); backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0 20px 0; z-index: 50; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 4px 14px; }
+        .nav-item.active { color: var(--accent); }
+        .nav-item .nav-icon { font-size: 21px; }
+
+        .empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
+        .empty .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-wrap">
+            <div class="logo-mark">SH</div>
+            <div>
+                <div class="logo-text">SPLIT HELPER</div>
+                <div class="logo-sub">Safe Store</div>
+            </div>
+        </div>
+        <div class="location"><div class="location-dot"></div>Москва</div>
+    </div>
+
+    <div class="verified-badge">
+        <span>🏆</span><span>Проверенный продавец</span>
+        <small>с 2024 года</small>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box"><div class="stat-num">1 248</div><div class="stat-label">Заказов</div></div>
+        <div class="stat-box"><div class="stat-num">3 502</div><div class="stat-label">Клиентов</div></div>
+        <div class="stat-box"><div class="stat-num">4.9★</div><div class="stat-label">Рейтинг</div></div>
+    </div>
+
+    <div class="security-banner">
+        <div class="security-icon">🛡️</div>
+        <div class="security-text">
+            <h4>100% Безопасно и анонимно</h4>
+            <p>SSL-шифрование, оплата без посредников. Мы не передаём данные третьим лицам.</p>
+        </div>
+    </div>
+
+    <div class="guarantees">
+        <div class="guarantee"><div class="g-icon">💰</div><div class="g-title">Возврат 100%</div><div class="g-desc">Если товар не пришёл</div></div>
+        <div class="guarantee"><div class="g-icon">🔒</div><div class="g-title">Гарантия 1 год</div><div class="g-desc">На всю технику</div></div>
+    </div>
+
+    <div class="trust-section">
+        <h3>💎 Почему нам доверяют</h3>
+        <div class="trust-grid">
+            <div class="trust-item"><div class="t-icon">⚡</div><div><b>Быстрая доставка</b><span>1-3 дня по РФ</span></div></div>
+            <div class="trust-item"><div class="t-icon">🎯</div><div><b>Оригинал</b><span>Гарантия качества</span></div></div>
+            <div class="trust-item"><div class="t-icon">💬</div><div><b>Поддержка 24/7</b><span>Отвечаем за 5 мин</span></div></div>
+            <div class="trust-item"><div class="t-icon">🔐</div><div><b>Безопасная оплата</b><span>СБП, крипта</span></div></div>
+        </div>
+    </div>
+
+    <div class="promo-box">
+        <h3>🎁 Есть промокод?</h3>
+        <div class="promo-input">
+            <input type="text" id="promoInput" placeholder="ВВЕДИТЕ КОД">
+            <button onclick="applyPromo()">Применить</button>
+        </div>
+        <div class="promo-result" id="promoResult"></div>
+    </div>
+
+    <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search" placeholder="Поиск техники..." oninput="renderProducts()">
+    </div>
+
+    <div class="cats" id="cats"></div>
+
+    <div class="sort-wrap">
+        <div class="sort-label" id="countLabel">Загрузка...</div>
+        <button class="sort-btn" onclick="toggleSort()">Сортировка: <span id="sortLabel">по скидке</span></button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="reviews-section">
+        <h3>⭐ Отзывы клиентов <small id="reviewsCount">4.9 из 5 • загрузка...</small></h3>
+        <div id="reviewsList"></div>
+        <button class="reviews-more" id="reviewsMoreBtn" onclick="showMoreReviews()">Показать ещё отзывы</button>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="filterCat('all')"><span class="nav-icon">🛍️</span><span>Магазин</span></button>
+        <button class="nav-item" onclick="showInfo('orders')"><span class="nav-icon">📦</span><span>Заказы</span></button>
+        <button class="nav-item" onclick="showInfo('support')"><span class="nav-icon">💬</span><span>Поддержка</span></button>
+        <button class="nav-item" onclick="showInfo('about')"><span class="nav-icon">ℹ️</span><span>О нас</span></button>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <h2>Оформление заказа</h2>
+            <p class="modal-sub">Заполните данные и выберите способ оплаты.</p>
+
+            <div class="trust-badges" style="display:flex;gap:8px;margin-bottom:16px;">
+                <div class="trust-badge" style="flex:1;background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);border-radius:12px;padding:10px 6px;text-align:center;font-size:10px;color:#2ecc71;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="font-size:18px;">🔒</span>SSL</div>
+                <div class="trust-badge" style="flex:1;background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);border-radius:12px;padding:10px 6px;text-align:center;font-size:10px;color:#2ecc71;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="font-size:18px;">👁️</span>Анонимно</div>
+                <div class="trust-badge" style="flex:1;background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);border-radius:12px;padding:10px 6px;text-align:center;font-size:10px;color:#2ecc71;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="font-size:18px;">✅</span>Без посредников</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Способ доставки</label>
+                <div class="delivery-options">
+                    <div class="delivery-opt selected" data-delivery="pvz" onclick="selectDelivery('pvz')">
+                        <span class="d-icon">📦</span>
+                        <div class="d-name">ПВЗ</div>
+                        <div class="d-price">от 200 ₽</div>
+                    </div>
+                    <div class="delivery-opt" data-delivery="courier" onclick="selectDelivery('courier')">
+                        <span class="d-icon">🚚</span>
+                        <div class="d-name">Курьер</div>
+                        <div class="d-price">от 400 ₽</div>
+                    </div>
+                    <div class="delivery-opt" data-delivery="pickup" onclick="selectDelivery('pickup')">
+                        <span class="d-icon">🏪</span>
+                        <div class="d-name">Самовывоз</div>
+                        <div class="d-price">бесплатно</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Город</label>
+                <input type="text" class="form-input" id="city" placeholder="Москва" value="Москва">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Улица и дом</label>
+                <input type="text" class="form-input" id="street" placeholder="ул. Ленина, д. 1">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Квартира</label>
+                    <input type="text" class="form-input" id="flat" placeholder="12">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Индекс</label>
+                    <input type="text" class="form-input" id="zip" placeholder="101000">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Получатель</label>
+                <input type="text" class="form-input" id="receiver" placeholder="Иванов Иван Иванович">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Телефон</label>
+                <input type="tel" class="form-input" id="phone" placeholder="+7 (___) ___-__-__">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Способ оплаты</label>
+            </div>
+
+            <div class="pay-methods">
+                <div class="pay-method selected" data-method="sbp" onclick="selectPay('sbp')">
+                    <div class="pay-icon pay-sbp">💳</div>
+                    <div class="pay-info">
+                        <div class="pay-name">СБП</div>
+                        <div class="pay-desc">Система быстрых платежей</div>
+                    </div>
+                    <div class="pay-check">✓</div>
+                </div>
+                <div class="pay-method" data-method="usdt" onclick="selectPay('usdt')">
+                    <div class="pay-icon pay-crypto">₮</div>
+                    <div class="pay-info">
+                        <div class="pay-name">USDT (TRC20)</div>
+                        <div class="pay-desc">Криптовалюта — анонимно</div>
+                    </div>
+                    <div class="pay-check">✓</div>
+                </div>
+                <div class="pay-method" data-method="xrocket" onclick="selectPay('xrocket')">
+                    <div class="pay-icon pay-xrocket">🚀</div>
+                    <div class="pay-info">
+                        <div class="pay-name">xRocket</div>
+                        <div class="pay-desc">Автопроверка оплаты</div>
+                    </div>
+                    <div class="pay-check">✓</div>
+                </div>
+            </div>
+
+            <div class="wallet-box">
+                <div class="wallet-label">Реквизиты для оплаты</div>
+                <div class="wallet-address" id="wallet">СБП: +7 XXX XXX-XX-XX</div>
+                <div class="wallet-sum" id="sum">0 ₽</div>
+            </div>
+
+            <div class="warning-box">
+                <span>⚠️</span>
+                <div>После перевода обязательно пришлите скриншот чека в чат бота. Без чека заказ не будет обработан.</div>
+            </div>
+
+            <button class="manager-btn" onclick="openManager()">💬 Написать менеджеру</button>
+            <button class="btn" style="background: linear-gradient(135deg, #2ecc71, #3498db); color: #fff;" onclick="confirmPay()">Я оплатил(а) — отправить заказ</button>
+            <button class="close" onclick="closeModal()">Отмена</button>
+            <div class="success" id="success">✅ Заказ принят! Ожидайте проверки чека.</div>
+        </div>
+    </div>
+
+    <script>
+        // ===== НАСТРОЙКИ =====
+        const MANAGER_USERNAME = "ваш_менеджер";
+        const SBP_PHONE = "+7 XXX XXX-XX-XX";
+        const USDT_WALLET = "TQ5...xRocket...USDT";
+        const XROCKET_TAG = "@xRocket";
+
+        // ===== ТОВАРЫ =====
+        const products = [
+            { id: 1, cat: 'apple', name: 'iPhone 18 Pro 512GB', desc: 'Тёмная вишня, SIM+eSIM', price: 60000, old: 170000, hit: true, rating: 5.0, reviews: 87, img: 'https://c.dns-shop.ru/thumb/st4/fit/0/0/8b3e6e6e6e6e6e6e6e6e6e6e6e6e6e6e/iphone.jpg' },
+            { id: 2, cat: 'apple', name: 'iPhone 17 Pro Max 1TB', desc: 'Титан, 1TB', price: 41000, old: 143000, rating: 4.9, reviews: 64, img: 'https://c.dns-shop.ru/thumb/st4/fit/0/0/8b3e6e6e6e6e6e6e6e6e6e6e6e6e6e6e/iphone17.jpg' },
+            { id: 3, cat: 'android', name: 'Galaxy S26 Ultra', desc: 'S-Pen, 200МП', price: 27000, old: 82900, hit: true, rating: 4.8, reviews: 52, img: 'https://c.dns-shop.ru/thumb/st4/fit/0/0/8b3e6e6e6e6e6e6e6e6e6e6e6e6e6e6e/s26.jpg' },
+            { id: 4, cat: 'android', name: 'Xiaomi 17 Ultra 512GB', desc: 'Leica, Snapdragon', price: 32000, old: 102000, rating: 4.9, reviews: 41, img: 'https://c.dns-shop.ru/thumb/st4/fit/0/0/8b3e6e6e6e6e6e6e6e6e6e6e6e6e6e6e/xiaomi.jpg' },
+            { id: 5, cat: 'laptop', name: 'MacBook Pro 14 M4', desc: '24GB, 1TB SSD', price: 85000, old: 250000, rating: 5.0, reviews: 38, img: 'https://c.dns-shop.ru/thumb/st4/fit/0/0/8b3e6e6e6e6e6e6e6e6e6e6e6e6e6e6e/macbook.jpg' },
+            { id: 6, cat: 'laptop', name: 'ASUS ROG Strix 18', desc: 'RTX 5090, i9', price: 120000, old: 350000, rating: 4.7, reviews: 29, img: 'https://c.dns-shop.ru/thumb/st4/fit/0/0/8b3e6e6e6e6e6e6e6e6e6e6e6e6e6e6e/asus.jpg' },
+            { id: 7, cat: 'apple', name: 'AirPods Pro 3', desc: 'USB-C, ANC', price: 12000, old: 25000, hit: true, rating: 4.9, reviews: 96, img: 'https://c.dns-shop.ru/thumb/st4/fit/0/0/8b3e6e6e6e6e6e6e6e6e6e6e6e6e6e6e/airpods.jpg' }
+        ];
+
+        // ===== ОТЗЫВЫ (200+) =====
+        const names = ["Алексей М.","Дмитрий К.","Екатерина В.","Сергей П.","Анна Т.","Михаил Р.","Ольга Н.","Иван С.","Наталья Л.","Владимир Ж.","Юлия Б.","Артём Г.","Мария Д.","Роман Ф.","Татьяна Щ.","Николай З.","Ирина К.","Павел А.","Светлана Е.","Андрей Х.","Елена Ю.","Кирилл Ц.","Оксана Ч.","Максим Ш.","Людмила Р.","Денис Т.","Валентина П.","Егор В.","Алиса Н.","Григорий М.","Полина О.","Станислав И.","Кристина У.","Виталий Я.","Регина С.","Антон Б.","Вера К.","Игорь Л.","Дарья Ф.","Борис Г."];
+        const reviewTextsGood = [
+            "Заказал {product}, пришёл за 3 дня. Всё оригинальное, упаковка запечатана. Рекомендую!",
+            "Цена реально ниже магазинов. Оплатил через {pay}, чек прислал — быстро подтвердили. Спасибо!",
+            "Отличный сервис! Менеджер помог с выбором, доставили в ПВЗ. Всё в целости.",
+            "Проверил серийник на сайте производителя — всё официальное. Доставка 2 дня. Буду заказывать ещё.",
+            "Долго выбирал, где купить. Здесь цена приятно удивила. Оплата {pay}, всё прошло гладко. Спасибо за честность!",
+            "Уже третий заказ. Ни разу не было проблем. Поддержка отвечает мгновенно, всегда поможет.",
+            "Купил {product} в подарок. Упаковка идеальная, всё запечатано. Жена в восторге!",
+            "Не верил в такие цены, но всё оказалось правдой. Товар пришёл раньше срока. Рекомендую!",
+            "Быстрая доставка, качественная упаковка, оригинальный товар. Что ещё нужно?",
+            "Оператор ответил моментально, помог оформить. Посылка пришла через 2 дня. Всё супер!",
+            "Заказывал у них впервые — переживал. Но всё прошло отлично. Оплатил {pay}, чек приняли за 10 минут.",
+            "Отличный магазин! Наконец-то нашёл место с адекватными ценами на технику.",
+            "Пришло быстрее, чем ожидал. Товар полностью соответствует описанию. Спасибо!",
+            "Пользуюсь уже полгода — всё работает. Гарантия реальная, проверял.",
+            "Менеджер настоящий профессионал. Помог подобрать {product} под мои задачи.",
+            "Всё честно и прозрачно. Оплата {pay}, чек, трек-номер — всё пришло вовремя.",
+            "Друзья посоветовали этот магазин — не пожалел. Качество на высоте.",
+            "Заказ пришёл в идеальном состоянии. Упаковка надёжная, ничего не повредилось.",
+            "Цены действительно ниже рынка. Не знаю, как они это делают, но я доволен!",
+            "Поддержка работает круглосуточно — это огромный плюс. Ответили в 2 часа ночи!",
+            "Купил {product}, пользуюсь уже месяц — полёт нормальный. Спасибо магазину!",
+            "Быстро, качественно, надёжно. Именно так должен работать сервис.",
+            "Оплатил {pay}, товар отправили в тот же день. Получил через 2 дня. Огонь!",
+            "Реальные отзывы, реальные товары. Проверил — всё соответствует.",
+            "Первый раз заказал — теперь буду постоянным клиентом. Всё на высшем уровне!",
+            "Скидка реальная, а не фиктивная. Сравнивал с другими магазинами — тут дешевле.",
+            "Менеджер вежливый, отвечает быстро, помогает по всем вопросам. Респект!",
+            "Товар оригинальный, чек и гарантия — всё на месте. Доволен покупкой!",
+            "Заказал жене {product} на годовщину — пришло вовремя, упаковано красиво.",
+            "Рекомендую всем! Честный магазин с реальными ценами и быстрой доставкой.",
+            "Сервис на уровне крупных сетей, а цены — как у знакомых. Идеально.",
+            "Приятно удивлён качеством обслуживания. Всё чётко, без задержек.",
+            "Заказ оформляется за минуту, оплата {pay} — быстро. Доставка порадовала.",
+            "Спасибо за помощь в выборе! {product} полностью оправдал ожидания.",
+            "Хороший магазин. Единственное — хотелось бы больше способов доставки, но это мелочи.",
+            "Проверенный продавец. Уже второй заказ — всё стабильно отлично.",
+            "Оплатил утром — вечером уже отправили. Скорость впечатляет!",
+            "Качество товара отличное. Продавец на связи 24/7 — это важно.",
+            "Заказывал MacBook — пришёл в заводской плёнке. Всё официально.",
+            "Реальные скидки, реальные товары. Не верил, пока сам не проверил.",
+            "Спасибо менеджеру за терпение — задавал много вопросов, но получил ответы на все."
+        ];
+        const reviewTextsNeutral = [
+            "Товар хороший, но доставка задержалась на день. В остальном всё ок.",
+            "Цена отличная, но упаковка была слегка помята. Товар целый, претензий нет.",
+            "Всё пришло, но ждал чуть дольше, чем обещали. Менеджер извинился, дал скидку на следующий заказ.",
+            "Нормальный магазин. Есть мелкие недочёты, но в целом доволен.",
+            "Товар соответствует описанию, но хотелось бы больше вариантов оплаты.",
+            "Купил, работает. Но с ответом поддержки пришлось подождать около часа.",
+            "В целом неплохо, но трек-номер прислали с задержкой.",
+            "Цена супер, но ПВЗ был далеко от дома. В следующий раз выберу курьера.",
+            "Всё ок, но упаковка могла быть надёжнее. Товар не пострадал.",
+            "Хороший сервис, но хотелось бы больше информации о товаре на сайте."
+        ];
+        const reviewTextsBad = [
+            "Заказ пришёл, но не в тот цвет, который заказывал. Поменяли, но осадок остался.",
+            "Долго не отвечали на сообщения. Товар пришёл, но нервы потратил.",
+            "Цена хорошая, но доставка заняла почти неделю. Ожидал быстрее.",
+            "Всё нормально, но менеджер был не очень вежлив. Товар в порядке.",
+            "Товар пришёл с царапиной на упаковке. Внутри всё целое, но неприятно."
+        ];
+
+        function generateReviews() {
+            const reviews = [];
+            const payMethods = ["СБП", "USDT", "xRocket"];
+            const productNames = ["iPhone 18 Pro", "Galaxy S26 Ultra", "AirPods Pro 3", "MacBook Pro 14", "Xiaomi 17 Ultra", "iPhone 17 Pro Max", "ASUS ROG Strix"];
+
+            // 170 хороших
+            for (let i = 0; i < 170; i++) {
+                const name = names[i % names.length];
+                const text = reviewTextsGood[i % reviewTextsGood.length]
+                    .replace("{product}", productNames[i % productNames.length])
+                    .replace("{pay}", payMethods[i % payMethods.length]);
+                const daysAgo = Math.floor(Math.random() * 60) + 1;
+                reviews.push({
+                    name,
+                    text,
+                    stars: 5,
+                    daysAgo,
+                    verified: true
+                });
+            }
+
+            // 25 нейтральных
+            for (let i = 0; i < 25; i++) {
+                const name = names[(i + 50) % names.length];
+                const text = reviewTextsNeutral[i % reviewTextsNeutral.length];
+                const daysAgo = Math.floor(Math.random() * 90) + 5;
+                reviews.push({
+                    name,
+                    text,
+                    stars: 4,
+                    daysAgo,
+                    verified: true
+                });
+            }
+
+            // 5 сдержанных
+            for (let i = 0; i < 5; i++) {
+                const name = names[(i + 80) % names.length];
+                const text = reviewTextsBad[i % reviewTextsBad.length];
+                const daysAgo = Math.floor(Math.random() * 120) + 10;
+                reviews.push({
+                    name,
+                    text,
+                    stars: 3,
+                    daysAgo,
+                    verified: true
+                });
+            }
+
+            // Перемешиваем
+            return reviews.sort(() => Math.random() - 0.5);
+        }
+
+        const allReviews = generateReviews();
+        let reviewsShown = 5;
+
+        function formatDate(daysAgo) {
+            if (daysAgo === 1) return "вчера";
+            if (daysAgo < 7) return `${daysAgo} дн. назад`;
+            if (daysAgo < 30) return `${Math.floor(daysAgo / 7)} нед. назад`;
+            return `${Math.floor(daysAgo / 30)} мес. назад`;
+        }
+
+        function renderReviews() {
+            const list = document.getElementById('reviewsList');
+            const shown = allReviews.slice(0, reviewsShown);
+            list.innerHTML = shown.map(r => `
+                <div class="review">
+                    <div class="review-head">
+                        <div class="review-name">${r.name} ${r.verified ? '<span class="review-verified">✅ Проверен</span>' : ''}</div>
+                        <div class="review-date">${formatDate(r.daysAgo)}</div>
+                    </div>
+                    <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+                    <div class="review-text">${r.text}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('reviewsCount').innerText = `4.9 из 5 • ${allReviews.length} отзывов`;
+
+            const btn = document.getElementById('reviewsMoreBtn');
+            if (reviewsShown >= allReviews.length) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'block';
+                btn.innerText = `Показать ещё отзывы (${allReviews.length - reviewsShown} осталось)`;
+            }
+        }
+
+        function showMoreReviews() {
+            reviewsShown += 10;
+            renderReviews();
+            if (window.Telegram?.WebApp) Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+
+        // ===== СОСТОЯНИЕ =====
+        let currentCat = 'all';
+        let sortMode = 'discount';
+        let selectedPay = 'sbp';
+        let selectedDelivery = 'pvz';
+        let currentOrder = null;
+        let promoApplied = 0;
+
+        const cats = [
+            { id: 'all', name: '🔥 Все' },
+            { id: 'apple', name: '🍎 Apple' },
+            { id: 'android', name: '🤖 Android' },
+            { id: 'laptop', name: '💻 Ноутбуки' }
+        ];
+
+        function renderCats() {
+            document.getElementById('cats').innerHTML = cats.map(c =>
+                `<button class="cat-btn ${c.id === currentCat ? 'active' : ''}" onclick="filterCat('${c.id}')">${c.name}</button>`
+            ).join('');
+        }
+
+        function toggleSort() {
+            const modes = ['discount', 'price_asc', 'price_desc'];
+            const labels = { discount: 'по скидке', price_asc: 'по цене ↑', price_desc: 'по цене ↓' };
+            sortMode = modes[(modes.indexOf(sortMode) + 1) % modes.length];
+            document.getElementById('sortLabel').innerText = labels[sortMode];
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('grid');
+            const q = (document.getElementById('search').value || '').toLowerCase().trim();
+
+            let filtered = products.filter(p => {
+                const matchCat = currentCat === 'all' || p.cat === currentCat;
+                const matchQ = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+                return matchCat && matchQ;
+            });
+
+            if (sortMode === 'discount') filtered.sort((a, b) => (1 - a.price / a.old) < (1 - b.price / b.old) ? 1 : -1);
+            else if (sortMode === 'price_asc') filtered.sort((a, b) => a.price - b.price);
+            else filtered.sort((a, b) => b.price - a.price);
+
+            document.getElementById('countLabel').innerText = `Найдено: ${filtered.length} товаров`;
+
+            if (!filtered.length) {
+                grid.innerHTML = `<div class="empty"><div class="icon">🔍</div><div>Ничего не найдено</div></div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => {
+                const discount = Math.round((1 - p.price / p.old) * 100);
+                return `
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <div class="badge-discount">-${discount}%</div>
+                        ${p.hit ? '<div class="badge-hit">🔥 ХИТ</div>' : ''}
+                        <img src="${p.img}" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=Фото'">
+                    </div>
+                    <div class="in-stock"><span class="dot"></span>В наличии</div>
+                    <h3>${p.name}</h3>
+                    <div class="desc">${p.desc}</div>
+                    <div class="card-rating">${'★'.repeat(Math.round(p.rating))} <span>${p.rating} (${p.reviews})</span></div>
+                    <div class="price-block">
+                        <div class="old">${p.old.toLocaleString()} ₽</div>
+                        <div class="new">${p.price.toLocaleString()} ₽</div>
+                    </div>
+                    <button class="btn" onclick="openModal(${p.price}, '${p.name.replace(/'/g, "\\'")}')">Заказать</button>
+                </div>`;
+            }).join('');
+        }
+
+        function filterCat(cat) {
+            currentCat = cat;
+            renderCats();
+            renderProducts();
+            if (window.Telegram?.WebApp) Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+
+        function applyPromo() {
+            const code = document.getElementById('promoInput').value.trim().toUpperCase();
+            const result = document.getElementById('promoResult');
+            if (code === 'SPLIT10') {
+                promoApplied = 10;
+                result.style.color = '#2ecc71';
+                result.innerText = '✅ Промокод применён! Скидка 10% на следующий заказ.';
+            } else if (code === 'HELPER15') {
+                promoApplied = 15;
+                result.style.color = '#2ecc71';
+                result.innerText = '✅ Промокод применён! Скидка 15%.';
+            } else if (code === '') {
+                result.style.color = '#e74c3c';
+                result.innerText = '⚠️ Введите промокод.';
+            } else {
+                result.style.color = '#e74c3c';
+                result.innerText = '❌ Промокод не найден.';
+            }
+        }
+
+        function openModal(price, name) {
+            if (window.Telegram?.WebApp) Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            currentOrder = { price, name };
+            document.getElementById('modal').classList.add('active');
+            selectPay('sbp');
+            selectDelivery('pvz');
+            updateWallet();
+            document.getElementById('sum').innerText = `${price.toLocaleString()} ₽`;
+        }
+
+        function selectPay(method) {
+            selectedPay = method;
+            document.querySelectorAll('.pay-method').forEach(el => el.classList.toggle('selected', el.dataset.method === method));
+            updateWallet();
+        }
+
+        function selectDelivery(type) {
+            selectedDelivery = type;
+            document.querySelectorAll('.delivery-opt').forEach(el => el.classList.toggle('selected', el.dataset.delivery === type));
+        }
+
+        function updateWallet() {
+            const el = document.getElementById('wallet');
+            if (selectedPay === 'sbp') el.innerHTML = `СБП:<br>${SBP_PHONE}`;
+            else if (selectedPay === 'usdt') el.innerHTML = `USDT (TRC20):<br>${USDT_WALLET}`;
+            else if (selectedPay === 'xrocket') el.innerHTML = `xRocket:<br>${XROCKET_TAG}`;
+        }
+
+        function openManager() {
+            if (window.Telegram?.WebApp) Telegram.WebApp.openTelegramLink(`https://t.me/${MANAGER_USERNAME}`);
+            else window.open(`https://t.me/${MANAGER_USERNAME}`, '_blank');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.getElementById('success').style.display = 'none';
+        }
+
+        function confirmPay() {
+            const city = document.getElementById('city').value.trim();
+            const street = document.getElementById('street').value.trim();
+            const flat = document.getElementById('flat').value.trim();
+            const zip = document.getElementById('zip').value.trim();
+            const receiver = document.getElementById('receiver').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+
+            if (!city || !street || !receiver || !phone) {
+                alert('⚠️ Заполните город, улицу, получателя и телефон.');
+                return;
+            }
+
+            const order = {
+                action: 'payment_check',
+                product: currentOrder?.name,
+                price: currentOrder?.price,
+                method: selectedPay,
+                delivery: selectedDelivery,
+                address: { city, street, flat, zip, receiver, phone }
+            };
+
+            if (window.Telegram?.WebApp) {
+                Telegram.WebApp.sendData(JSON.stringify(order));
+                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+            }
+            document.getElementById('success').style.display = 'block';
+            setTimeout(closeModal, 3000);
+        }
+
+        function showInfo(type) {
+            if (!window.Telegram?.WebApp) return;
+            if (type === 'orders') Telegram.WebApp.showAlert('Ваши заказы приходят в чат с ботом.');
+            if (type === 'support') Telegram.WebApp.showAlert('Поддержка: @' + MANAGER_USERNAME);
+            if (type === 'about') Telegram.WebApp.showAlert('SPLIT HELPER — безопасный сервис. Мы не храним ваши данные.');
+        }
+
+        renderCats();
+        renderProducts();
+        renderReviews();
+
+        if (window.Telegram?.WebApp) {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+            Telegram.WebApp.setHeaderColor('#0a0a0f');
+            Telegram.WebApp.setBackgroundColor('#0a0a0f');
+        }
+    </script>
+</body>
+</html>
